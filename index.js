@@ -13,12 +13,13 @@ io.on("connect", (socket) => {
         // mousedown event will be fired by the client who was control on the table
         console.log(`client ${socket.id} has clicked ${
             data.x} and ${data.y}`);
-        console.log(data.curr_mutation);
         let id = socket.id;
         let x = data.x;
         let y = data.y;
+        let selector_string = data.selector_string;
+        console.log("selector: ", selector_string);
         socket.broadcast.emit("eventrecord", {
-            id, x, y
+            id, x, y, selector_string
         })
     });
 
