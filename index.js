@@ -17,9 +17,11 @@ io.on("connect", (socket) => {
         let x = data.x;
         let y = data.y;
         let selector_string = data.selector_string;
+        let global_x = data.globalx;
+        let global_y = data.globaly;
         console.log("selector: ", selector_string);
         socket.broadcast.emit("eventrecord", {
-            id, x, y, selector_string
+            id, x, y, selector_string, global_x, global_y
         })
     });
 
