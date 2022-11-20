@@ -34,6 +34,14 @@ io.on("connect", (socket) => {
         })
     })
 
+    socket.on("mutationrecord", (record) =>{
+        //console.log("aaaa" , record.mutationtarget, record.addedElemHTML);
+        const target = record.mutationtarget;
+        const innerhtml = record.addedElemHTML;
+        socket.broadcast.emit("mutation", {
+            target, innerhtml
+        })
+    });
 
     socket.on("disconnect", (reason) => {
         connections = connections.filter(con => con.id !== socket.id);
