@@ -10,18 +10,12 @@ io.on("connect", (socket) => {
     console.log(socket.id ,"has connected");
 
     socket.on("mousedown", (data) => {
-        // mousedown event will be fired by the client who was control on the table
-        console.log(`client ${socket.id} has clicked ${
-            data.x} and ${data.y}`);
         let id = socket.id;
         let x = data.x;
         let y = data.y;
         let selector_string = data.selector_string;
-        let global_x = data.globalx;
-        let global_y = data.globaly;
-        console.log("selector: ", selector_string);
         socket.broadcast.emit("eventrecord", {
-            id, x, y, selector_string, global_x, global_y
+            id, x, y, selector_string
         })
     });
 
@@ -34,14 +28,27 @@ io.on("connect", (socket) => {
         })
     })
 
-    socket.on("mutationrecord", (record) =>{
-        //console.log("aaaa" , record.mutationtarget, record.addedElemHTML);
+    socket.on("addedmutationrecord", (record) =>{
         const target = record.mutationtarget;
-        const innerhtml = record.addedElemHTML;
-        socket.broadcast.emit("mutation", {
-            target, innerhtml
-        })
+        const elemHTML = record.addedElemHTML;
+        socket.broadcast.emit("addedmutation", {
+            target, elemHTML
+        });
     });
+
+    socket.on("removedmutationrecord", () =>{
+        socket.broadcast.emit("deletemutations", {});
+    });
+
+    socket.on("modifiedAttributeRecord", (record) => {
+        const changedAttribute = record.changedAttribute;
+        const mutationTarget = record.mutationTarget;
+        const mutationValue = record.mutationValue;
+        const mutatedElemHTML = record.mutatedElemHTML;
+        socket.broadcast.emit("attributeModify", {
+            changedAttribute, mutationTarget, mutationValue, mutatedElemHTML
+        });
+    })
 
     socket.on("disconnect", (reason) => {
         connections = connections.filter(con => con.id !== socket.id);
