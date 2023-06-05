@@ -28,6 +28,18 @@ io.on("connect", (socket) => {
         })
     })
 
+    socket.on("mousewheel", (data) => {
+        const scrollY = data.scrollY;
+        const iframeIndex = data.iframeIndex;
+        const scaledX = data.scaledX;
+        const scaledY = data.scaledY;
+
+        socket.broadcast.emit("scrollrecord", {
+            scrollY, scaledX, scaledY, iframeIndex
+        })
+    })
+
+
     socket.on("addedmutationrecord", (record) => {
         const mutationTarget = record.mutationTarget;
         const addedElemHTML = record.addedElemHTML;
@@ -40,6 +52,7 @@ io.on("connect", (socket) => {
     socket.on("removedmutationrecord", (record) => {
         const iframeIndex = record.iframeIndex;
         socket.broadcast.emit("deletemutations", { iframeIndex });
+
     });
 
     socket.on("modifiedAttributeRecord", (record) => {
@@ -51,6 +64,7 @@ io.on("connect", (socket) => {
         socket.broadcast.emit("attributeModify", {
             changedAttribute, mutationTarget, mutationValue, mutatedElemHTML, iframeIndex
         });
+
     })
 
     socket.on("disconnect", (reason) => {
