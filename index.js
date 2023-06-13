@@ -39,6 +39,14 @@ io.on("connect", (socket) => {
         })
     })
 
+    socket.on("canvasnavigation", (data) => {
+        const iframeIndex = data.iframeIndex;
+        const canvasUrl = data.canvasUrl;
+        socket.broadcast.emit("canvasnavigationrecord", {
+            canvasUrl, iframeIndex
+        })
+    })
+
 
     socket.on("addedmutationrecord", (record) => {
         const mutationTarget = record.mutationTarget;
