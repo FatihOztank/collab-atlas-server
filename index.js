@@ -47,6 +47,13 @@ io.on("connect", (socket) => {
         })
     })
 
+    socket.on("setLockState", (data) => {
+        const iframeIndex = data.iframeIndex;
+        const lockState = data.lockState;
+        socket.broadcast.emit("setLockStateValue", {
+            lockState, iframeIndex
+        })
+    })
 
     socket.on("addedmutationrecord", (record) => {
         const mutationTarget = record.mutationTarget;
