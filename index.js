@@ -58,6 +58,10 @@ io.on("connect", (socket) => {
     socket.on("opensecondiframe", () => {
         socket.broadcast.emit("secondiframeopened", {});
     })
+
+    socket.on("syncrequest", () => {
+        socket.broadcast.emit("syncrequestrecord", {})
+    })
 });
 
 let PORT = process.env.PORT || 8080;
